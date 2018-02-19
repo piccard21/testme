@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Faker\Factory as Faker;
+use Carbon\Carbon;
 
 class Whatever extends Command
 {
@@ -72,12 +74,32 @@ class Whatever extends Command
 
 
 	    $bar = $this->output->createProgressBar(count($books));
+	    $faker = Faker::create();
 
+	    $allBooks = [];
 	    foreach ($books as $b) {
 
 		    $bar->advance();
-		    usleep(250000);
+
+//$data = [
+//    ['name' => 'John', 'age' => 25],
+//    ['name' => 'Maria', 'age' => 31],
+//    ['name' => 'Julia', 'age' => 55],
+//];
+//Then insert the data using Eloquent model:
+//
+//Model::insert($data);
+//Or using query builder:
+//
+//DB::table('table_name')->insert($data);
+
+			    $newBook = new \App\Book();
+			    $newBook->title = $faker->phoneNumber;
+			    $allBooks[] = $newBook->attributesToArray();
+
+//		    usleep(250000);
 	    }
+	    \App\Book::insert($allBooks);
 
 	    $bar->finish();
 
